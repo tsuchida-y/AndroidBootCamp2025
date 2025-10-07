@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidBootCamp2025</string>
+    <string name="RegistrationName">登録者名</string>
 </resources>
