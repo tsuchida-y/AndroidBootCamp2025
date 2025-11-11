@@ -22,6 +22,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -74,6 +75,26 @@ fun AppBar(modifier: Modifier = Modifier) {
     )
 }
 
+/// ボトムナビゲーションバーの実装
+/// データとUIを分離した
+
+
+// 各ナビゲーションアイテムの情報をまとめるためのデータクラス
+private data class NavigationItem(
+    val label: String,
+    val icon: ImageVector,
+    val route: String
+)
+
+// 表示するナビゲーションアイテムのリスト
+private val bottomNavItems = listOf(
+    NavigationItem("ホーム", Icons.Default.Home, "home"),
+    NavigationItem("ショート", Icons.Default.PlayArrow, "shorts"),
+    NavigationItem("作成", Icons.Default.Add, "create"),
+    NavigationItem("登録チャンネル", Icons.Default.PlayArrow, "subscriptions"),
+    NavigationItem("マイページ", Icons.Default.AccountCircle, "library")
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigation(modifier: Modifier = Modifier) {
@@ -81,76 +102,39 @@ fun BottomNavigation(modifier: Modifier = Modifier) {
         containerColor = Color.White,
         modifier = modifier
     ) {
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text(
-                    text = ("ホーム")
-                )
-            },
-            selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text(
-                    text = ("ショート")
-                )
-            },
-            selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null
-                )
-            },
-            selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text(
-                    text = ("登録チャンネル"),
-                    fontSize = 9.sp
-                )
-            },
-            selected = true,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text(
-                    text = ("マイページ")
-                )
-            },
-            selected = false,
-            onClick = {}
-        )
+        // 現在選択されているアイテムのルート（例として "subscriptions" を指定）
+        val currentRoute = "subscriptions"
+
+        // アイテムのリストをループ処理してNavigationBarItemを動的に生成
+        bottomNavItems.forEach { item ->
+
+            // 「作成」ボタンだけはラベルがないので特別扱い
+            val hasLabel = item.route != "create"
+
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = item.label
+                    )
+                },
+                // ラベルを持つアイテムの場合のみTextを表示
+                label = if (hasLabel) {
+                    {
+                        Text(
+                            text = item.label,
+                            fontSize = 9.sp // フォントサイズを統一
+                        )
+                    }
+                } else {
+                    null
+                },
+
+                // 現在選択されているアイテムかどうかを判定
+                selected = (currentRoute == item.route),
+                // クリックされたときの処理（将来的には画面遷移を実装）
+                onClick = { /* TODO: item.route を使って画面遷移 */ }
+            )
+        }
     }
 }
