@@ -75,9 +75,9 @@ fun AppBar(modifier: Modifier = Modifier) {
     )
 }
 
+
 /// ボトムナビゲーションバーの実装
 /// データとUIを分離した
-
 
 // 各ナビゲーションアイテムの情報をまとめるためのデータクラス
 private data class NavigationItem(
@@ -97,7 +97,10 @@ private val bottomNavItems = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomNavigation(modifier: Modifier = Modifier) {
+fun BottomNavigation(
+    modifier: Modifier = Modifier,
+    onNavigate: (String) -> Unit
+) {
     NavigationBar(
         containerColor = Color.White,
         modifier = modifier
@@ -133,7 +136,7 @@ fun BottomNavigation(modifier: Modifier = Modifier) {
                 // 現在選択されているアイテムかどうかを判定
                 selected = (currentRoute == item.route),
                 // クリックされたときの処理（将来的には画面遷移を実装）
-                onClick = { /* TODO: item.route を使って画面遷移 */ }
+                onClick = { onNavigate(item.route)  }
             )
         }
     }

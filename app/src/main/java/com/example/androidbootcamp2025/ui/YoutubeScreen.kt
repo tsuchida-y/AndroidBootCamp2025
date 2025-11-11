@@ -21,14 +21,22 @@ import com.example.androidbootcamp2025.viewmodel.YoutubeViewModel
 @Composable
 fun YoutubeScreen(
     modifier: Modifier = Modifier,
-    viewModel: YoutubeViewModel
+    viewModel: YoutubeViewModel,
+    navController: androidx.navigation.NavHostController // NavControllerを引数で受け取る
 ) {
     // ViewModelのuiStateを監視し、変更があれば再Composeされる
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {AppBar()},
-        bottomBar = { BottomNavigation() }
+        bottomBar = { BottomNavigation(
+            onNavigate = { route ->
+                navController.navigate(route) {
+                    // スタックに同じ画面が積み重ならないようにする設定
+                    launchSingleTop = true
+                }
+            }
+        ) }
     ){padding ->  //パディングを自動で計算してくれる
         Column (
             //ボトムバー、トップバーの分だけ内側にずらす
