@@ -4,5 +4,5 @@
 
 # ローカル設定ファイル
 /.idea
-.gradle
+/.gradle
 /local.properties
