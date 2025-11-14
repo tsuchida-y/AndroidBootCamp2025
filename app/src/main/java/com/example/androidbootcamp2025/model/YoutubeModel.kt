@@ -15,5 +15,6 @@ data class Video(
     @DrawableRes val thumbnailRes: Int,
     @DrawableRes val channelIconRes: Int,
     val viewCount: String,
-    val uploadedAt: String
+    val uploadedAt: String,
+    val likeCount: Int
 )

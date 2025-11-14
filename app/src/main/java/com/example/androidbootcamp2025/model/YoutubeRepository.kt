@@ -26,7 +26,8 @@ class YoutubeRepository {
                 thumbnailRes = R.drawable.youtube_thumbnail2,
                 channelIconRes = R.drawable.sample_image1,
                 viewCount = "100万回",
-                uploadedAt = "1日前"
+                uploadedAt = "1日前",
+                likeCount = 5
             );
             Video(
                 title = "【料理】自家製パンの作り方",
@@ -34,7 +35,8 @@ class YoutubeRepository {
                 thumbnailRes = R.drawable.youtube_thumbnail3,
                 channelIconRes = R.drawable.sample_image2,
                 viewCount = "100万回",
-                uploadedAt = "1日前"
+                uploadedAt = "1日前",
+                likeCount = 10
             )
         }
     }

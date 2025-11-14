@@ -75,9 +75,8 @@ fun AppBar(modifier: Modifier = Modifier) {
     )
 }
 
-
-/// ボトムナビゲーションバーの実装
 /// データとUIを分離した
+/// ナビゲーションの構造が複雑になったらmodel層に移動することを考える
 
 // 各ナビゲーションアイテムの情報をまとめるためのデータクラス
 private data class NavigationItem(
@@ -91,22 +90,22 @@ private val bottomNavItems = listOf(
     NavigationItem("ホーム", Icons.Default.Home, "home"),
     NavigationItem("ショート", Icons.Default.PlayArrow, "shorts"),
     NavigationItem("作成", Icons.Default.Add, "create"),
-    NavigationItem("登録チャンネル", Icons.Default.PlayArrow, "subscriptions"),
+    NavigationItem("登録チャンネル", Icons.Default.PlayArrow, "RegisteredChannels"),
     NavigationItem("マイページ", Icons.Default.AccountCircle, "library")
 )
 
+/// ボトムナビゲーションバーの実装
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigation(
     modifier: Modifier = Modifier,
+    currentRoute: String?,
     onNavigate: (String) -> Unit
 ) {
     NavigationBar(
         containerColor = Color.White,
         modifier = modifier
     ) {
-        // 現在選択されているアイテムのルート（例として "subscriptions" を指定）
-        val currentRoute = "subscriptions"
 
         // アイテムのリストをループ処理してNavigationBarItemを動的に生成
         bottomNavItems.forEach { item ->
@@ -136,7 +135,9 @@ fun BottomNavigation(
                 // 現在選択されているアイテムかどうかを判定
                 selected = (currentRoute == item.route),
                 // クリックされたときの処理（将来的には画面遷移を実装）
-                onClick = { onNavigate(item.route)  }
+                onClick = {
+                    onNavigate(item.route)
+                }
             )
         }
     }

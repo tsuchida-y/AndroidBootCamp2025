@@ -4,19 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
-import com.example.androidbootcamp2025.ui.YoutubeScreen
+import com.example.androidbootcamp2025.ui.AppNavHost
 import com.example.androidbootcamp2025.ui.components.AppBar
 import com.example.androidbootcamp2025.ui.components.BottomNavigation
-import com.example.androidbootcamp2025.ui.navigation.AppNavHost
 import com.example.androidbootcamp2025.ui.theme.AndroidBootCamp2025Theme
-import com.example.androidbootcamp2025.viewmodel.YoutubeViewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+
 
 class MainActivity : ComponentActivity() {
 
@@ -33,9 +33,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen() {
-
-    //ナビゲーションコントローラーの作成
     val navController = rememberNavController()
+
+    // NavControllerから現在のルートを取得
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     //各画面で共通している部分を構築
     Scaffold(
@@ -43,11 +45,9 @@ fun MainScreen() {
         topBar = { AppBar() },
         bottomBar = {
             BottomNavigation(
+                currentRoute = currentRoute,
                 //クリックされたら画面のルート名を受け取る
                 onNavigate = { route ->
-
-                    //現在画面のルートを取得
-                    val currentRoute = navController.currentBackStackEntry?.destination?.route
 
                     //同じ画面への遷移を防ぐ
                     if (currentRoute != route) {
@@ -75,11 +75,11 @@ fun MainScreen() {
                 }
             )
         }
-    ) { paddingValues ->
+    ) { paddingValues -> // Scaffoldの内のパディング値を取得
         AppNavHost(
             navController = navController,
-            startDestination = "subscriptions",
-            modifier = Modifier.padding(paddingValues)
+            startDestination = "home",     // 最初に表示する画面
+            modifier = Modifier.padding(paddingValues)  //パディングを適応
         )
     }
 }

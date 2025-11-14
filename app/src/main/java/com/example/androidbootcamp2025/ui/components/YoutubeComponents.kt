@@ -3,6 +3,7 @@ package com.example.androidbootcamp2025.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,8 +14,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -65,6 +76,11 @@ fun VideoItem(
     video: Video,
     modifier: Modifier = Modifier
 ) {
+    //いいねされているかどうかを記憶する状態
+    var isLiked by remember { mutableStateOf(false) }
+    //いいね数を記憶する状態 (初期値はvideoオブジェクトから取得)
+    var likeCount by remember { mutableIntStateOf(video.likeCount) }
+
     Column(
         modifier = modifier.padding(bottom = 18.dp)
     ) {
@@ -73,13 +89,14 @@ fun VideoItem(
                 .fillMaxWidth()
                 .height(200.dp) // 高さを固定
         ) {
+            //動画のサムネ
             Image(
                 painter = painterResource(id = video.thumbnailRes),
                 contentDescription = "動画サムネ",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
-            // 右下に動画時間を表示
+            // サムネの右下に動画時間を表示
             Text(
                 text = "10:25",
                 color = Color.White,
@@ -120,7 +137,9 @@ fun VideoItem(
 
             // タイトルと情報
             Column(
-                modifier = Modifier.padding(start = 8.dp) ,
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .weight(1f), // 残りのスペースを全て使う
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
@@ -136,6 +155,42 @@ fun VideoItem(
                     modifier = Modifier.padding(top = 1.dp)
                 )
             }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp), // アイコンとテキストの間のスペース
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+
+                //いいねボタン
+                IconButton(
+                    onClick = {
+                        // 状態を反転
+                        isLiked = !isLiked
+
+                        // 状態に応じていいね数を増減させる
+                        if (isLiked) {
+                            likeCount++
+                        } else {
+                            likeCount--
+                        }
+                    },
+                    modifier = Modifier.size(24.dp) // ボタンのサイズを小さく調整
+                ) {
+                    Icon(
+                        imageVector = if (isLiked) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp,
+                        contentDescription = "いいね",
+                        tint = if (isLiked) Color.Black else Color.Gray // 色も変える
+                    )
+                }
+
+                // いいね数
+                Text(
+                    text = likeCount.toString(),
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+            }
+
         }
     }
 }
